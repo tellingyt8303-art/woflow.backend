@@ -1,10 +1,11 @@
+
 """
 database/db.py — Firebase Firestore CRUD helpers
 Saare modules ise use karte hain directly Firestore se baat karne ke liye
 """
+import os
 import firebase_admin
 from firebase_admin import credentials, firestore
-from config import FIREBASE_CREDENTIALS_PATH, FIREBASE_DATABASE_URL
 from typing import Optional
 
 _db = None
@@ -12,8 +13,19 @@ _db = None
 def init_firebase():
     global _db
     if not firebase_admin._apps:
-        cred = credentials.Certificate(FIREBASE_CREDENTIALS_PATH)
-        firebase_admin.initialize_app(cred, {"databaseURL": FIREBASE_DATABASE_URL})
+        cred_dict = {
+            "type": "service_account",
+            "project_id": os.environ["FIREBASE_PROJECT_ID"],
+            "private_key_id": os.environ["FIREBASE_PRIVATE_KEY_ID"],
+            "private_key": os.environ["FIREBASE_PRIVATE_KEY"].replace('\\n', '\n'),
+            "client_email": os.environ["FIREBASE_CLIENT_EMAIL"],
+            "client_id": os.environ["FIREBASE_CLIENT_ID"],
+            "token_uri": "https://oauth2.googleapis.com/token",
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        }
+        cred = credentials.Certificate(cred_dict)
+        firebase_admin.initialize_app(cred)
     _db = firestore.client()
     return _db
 
