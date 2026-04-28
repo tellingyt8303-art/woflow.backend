@@ -11,7 +11,7 @@ META_API_VERSION    = "v19.0"
 META_API_BASE       = f"https://graph.facebook.com/{META_API_VERSION}"
 
 # ─── Firebase ─────────────────────────────────────────────────
-FIREBASE_CREDENTIALS_PATH = os.getenv("FIREBASE_CREDENTIALS_PATH", "firebase-credentials.json")
+
 FIREBASE_DATABASE_URL     = os.getenv("FIREBASE_DATABASE_URL", "")
 
 # ─── App ──────────────────────────────────────────────────────
